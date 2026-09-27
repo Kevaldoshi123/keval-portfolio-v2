@@ -1,0 +1,5 @@
+Asset: Fabric030 (1K JPG)
+Source: https://ambientcg.com/a/Fabric030
+Author: Lennart Demes / ambientCG
+License: CC0 1.0 Universal (Public Domain Dedication)
+Description: A high-quality scanned woven fabric texture used for the portfolio background surface.

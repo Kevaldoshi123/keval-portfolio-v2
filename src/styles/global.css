@@ -1,0 +1,10 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow: hidden; /* Prevent scrolling for the full-screen canvas */
+  background-color: #0a0b0e; /* Fallback dark background */
+}
