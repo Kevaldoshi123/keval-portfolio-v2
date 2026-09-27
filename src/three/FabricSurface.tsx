@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import * as THREE from 'three';
+import { globalUniforms, displacementShaderChunk } from './GlobalUniforms';
 
 export function FabricSurface() {
   const [fabricMaterial, setFabricMaterial] = useState<THREE.MeshStandardMaterial | null>(null);
@@ -59,6 +60,27 @@ export function FabricSurface() {
         
         side: THREE.DoubleSide
       });
+      
+      mat.onBeforeCompile = (shader) => {
+        shader.uniforms.uCursor = globalUniforms.uCursor;
+        shader.uniforms.uCursorVelocity = globalUniforms.uCursorVelocity;
+        shader.uniforms.uDeformRadius = globalUniforms.uDeformRadius;
+        shader.uniforms.uDeformDepth = globalUniforms.uDeformDepth;
+        
+        shader.vertexShader = `
+          ${displacementShaderChunk}
+          ${shader.vertexShader}
+        `;
+        
+        shader.vertexShader = shader.vertexShader.replace(
+          '#include <begin_vertex>',
+          `
+          #include <begin_vertex>
+          // objectNormal is available in Three.js standard materials before projection
+          applyCursorDeformation(transformed, objectNormal);
+          `
+        );
+      };
       
       setFabricMaterial(mat);
       
