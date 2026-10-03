@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { DESTINATIONS, type Destination, type DestinationId } from '../../navigation/navigationData';
-import { EmbroideredPlanet } from '../cosmic/EmbroideredPlanet';
+import { NavigationPlanet } from './NavigationPlanet';
 import { EmbroideryEngine } from '../embroidery/EmbroideryEngine';
 import { StitchUtils } from '../embroidery/StitchUtils';
 import { getTextCurves } from '../embroidery/TextStrokes';
@@ -17,24 +17,24 @@ interface DestinationGroupProps {
 
 function DestinationGroup({ dest, isActive, x, y, isMobile, onClick }: DestinationGroupProps) {
   const textStitches = useMemo(() => {
-    // Increased scale for absolute readability, keeping spacing tight
-    const scale = isMobile ? 0.055 : 0.062;
-    const letterSpacing = 0.22; // Tighter spacing to allow larger scale
+    // Maximum possible scale that fits within horizontal boundaries
+    const scale = isMobile ? 0.055 : 0.065;
+    const letterSpacing = 0.15; // Tight spacing prevents horizontal overlap
     
     const textWidth = dest.title.length * scale + (dest.title.length - 1) * scale * letterSpacing;
     const textStartX = -textWidth / 2;
-    const textY = -0.32; // Placed underneath the object
+    const textY = -0.49; // Placed further underneath to clear the now larger planet
     
     const threadOpts: ThreadOptions = {
-      color: isActive ? '#E8D2AE' : '#D4C4A8', // Warm cream and ivory, same family as KEVAL DOSHI
-      thickness: 0.016, // Very thick strokes for maximum small-text readability
-      elevation: 0.02, // Slightly lifted to avoid sinking into fabric
-      stitchLength: 0.025,
-      stitchSpacing: 0.001, // Highly dense stitches
+      color: isActive ? '#F4E7D3' : '#E8D2AE', // Warm cream and ivory
+      thickness: 0.005, // Thin thread to preserve negative space inside letters
+      elevation: 0.01, // Very subtle lift
+      stitchLength: 0.015,
+      stitchSpacing: 0.001, // High density along the curve
       pattern: 'RUNNING',
-      rowCount: isActive ? 5 : 4, // More rows for solidity
-      rowSpacing: 0.004,
-      jitter: 0.001
+      rowCount: isActive ? 3 : 2, // Minimal rows to prevent stroke bleeding
+      rowSpacing: 0.0015,
+      jitter: 0.0005 // Minimal jitter for clean letterforms
     };
     
     const curves = getTextCurves(dest.title, textStartX, textY, scale, letterSpacing);
@@ -42,6 +42,7 @@ function DestinationGroup({ dest, isActive, x, y, isMobile, onClick }: Destinati
     curves.forEach(curve => {
       stitches = stitches.concat(StitchUtils.generateStitchesFromCurve(curve, threadOpts));
     });
+    
     return stitches;
   }, [dest, isActive, isMobile]);
 
@@ -53,9 +54,9 @@ function DestinationGroup({ dest, isActive, x, y, isMobile, onClick }: Destinati
         onClick();
       }}
     >
-      <EmbroideredPlanet
+      <NavigationPlanet
         position={[0, 0, 0]}
-        scale={isActive ? 0.20 : 0.14}
+        scale={isActive ? 0.46 : 0.38}
         planetType={dest.planetType}
         palette={dest.palette}
         driftAmplitude={isActive ? 0.03 : 0.015}

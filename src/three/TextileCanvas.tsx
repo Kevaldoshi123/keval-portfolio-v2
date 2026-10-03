@@ -6,6 +6,9 @@ import { EmbroideredStarField } from './cosmic/EmbroideredStarField';
 import { CosmicDustField } from './cosmic/CosmicDustField';
 import { OrbitalSystem } from './cosmic/OrbitalSystem';
 import { EmbroideredPlanet } from './cosmic/EmbroideredPlanet';
+import { EmbroideredRocket } from './objects/EmbroideredRocket';
+import { EmbroideredAstronaut } from './objects/EmbroideredAstronaut';
+import { DestinationWorlds } from './navigation/DestinationWorlds';
 import * as THREE from 'three';
 import { globalUniforms } from './GlobalUniforms';
 
@@ -249,6 +252,19 @@ export function TextileCanvas() {
           />
           <EmbroideredStarField />
           <TestEmbroideryScene />
+          
+          {/* NAVIGATION OBJECTS */}
+          <EmbroideredRocket 
+            position={[-1.6, 1.5, -2.9]} 
+            scale={0.25} 
+            rotation={[0, 0, Math.PI / 6]} 
+          />
+          <EmbroideredAstronaut 
+            position={[1.5, 0.2, -2.85]} 
+            scale={0.2} 
+            rotation={[0, 0, -Math.PI / 8]} 
+          />
+          <DestinationWorlds />
         </Suspense>
       </Canvas>
     </div>

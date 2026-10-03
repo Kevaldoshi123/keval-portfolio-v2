@@ -51,25 +51,21 @@ export const getLetterCurves = (char: string): THREE.Curve<THREE.Vector3>[] => {
     case 'D':
       return [
         L(0, 1, 0, 0), // Spine
-        C([
-          [0, 1],
-          [0.8, 1],
-          [1, 0.5],
-          [0.8, 0],
-          [0, 0]
-        ])
+        L(0, 1, 0.5, 1), // Top flat
+        C([[0.5, 1], [0.9, 0.8], [1, 0.5], [0.9, 0.2], [0.5, 0]]), // Curve
+        L(0.5, 0, 0, 0) // Bottom flat
       ];
     case 'O':
       return [
         C([
           [0.5, 1],
-          [0.1, 0.85],
+          [0.15, 0.85],
           [0, 0.5],
-          [0.1, 0.15],
+          [0.15, 0.15],
           [0.5, 0],
-          [0.9, 0.15],
+          [0.85, 0.15],
           [1, 0.5],
-          [0.9, 0.85]
+          [0.85, 0.85]
         ], true) // Closed loop
       ];
     case 'S':
@@ -96,7 +92,55 @@ export const getLetterCurves = (char: string): THREE.Curve<THREE.Vector3>[] => {
       ];
     case 'I':
       return [
-        L(0.5, 1, 0.5, 0) // Spine
+        L(0.1, 1, 0.1, 0) // Spine at 0.1 instead of 0.5 to fix kerning
+      ];
+    case 'P':
+      return [
+        L(0, 1, 0, 0),
+        C([[0, 1], [0.8, 1], [1, 0.75], [0.8, 0.5], [0, 0.5]])
+      ];
+    case 'R':
+      return [
+        L(0, 1, 0, 0),
+        C([[0, 1], [0.8, 1], [1, 0.75], [0.8, 0.5], [0, 0.5]]),
+        L(0.3, 0.5, 1, 0)
+      ];
+    case 'J':
+      return [
+        L(0.8, 1, 0.8, 0.2),
+        C([[0.8, 0.2], [0.6, 0], [0.2, 0], [0, 0.2]])
+      ];
+    case 'C':
+      return [
+        C([[1, 0.8], [0.5, 1], [0, 0.5], [0.5, 0], [1, 0.2]])
+      ];
+    case 'T':
+      return [
+        L(0, 1, 1, 1),
+        L(0.5, 1, 0.5, 0)
+      ];
+    case 'X':
+      return [
+        L(0, 1, 1, 0),
+        L(1, 1, 0, 0)
+      ];
+    case 'N':
+      return [
+        L(0, 0, 0, 1),
+        L(0, 1, 1, 0),
+        L(1, 0, 1, 1)
+      ];
+    case 'B':
+      return [
+        L(0, 1, 0, 0),
+        C([[0, 1], [0.8, 1], [1, 0.75], [0.8, 0.5], [0, 0.5]]),
+        C([[0, 0.5], [0.8, 0.5], [1, 0.25], [0.8, 0], [0, 0]])
+      ];
+    case 'U':
+      return [
+        L(0, 1, 0, 0.3),
+        C([[0, 0.3], [0.1, 0], [0.5, 0], [0.9, 0], [1, 0.3]]),
+        L(1, 0.3, 1, 1)
       ];
     default:
       return [];
@@ -146,10 +190,9 @@ export const getTextCurves = (
     });
 
     // Move cursor for next letter
-    // The width of a standard letter is roughly 'scale'. 
-    // We add letterSpacing to get to the next origin.
-    // Letters like 'I' could ideally use less width, but keeping it monospaced-ish is fine for now.
-    currentX += scale * (char === 'I' ? 0.6 : 1.0) + (scale * letterSpacing);
+    // I has width 0.2. All other letters have width 1.0.
+    const charWidth = (char === 'I') ? 0.2 : 1.0;
+    currentX += scale * charWidth + (scale * letterSpacing);
   }
 
   return allCurves;
